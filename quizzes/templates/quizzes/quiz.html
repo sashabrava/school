@@ -1,10 +1,10 @@
-{% extends "pages/base.html" %}
+{% extends "main_pages/base.html" %}
 
   {% block title %}<h1>Tests</h1>{% endblock %}  
   {% block content %}
   {% if quiz %}
   <div class = "container">
-  <form action="{% url 'quizes:result' %}" method="post"  name="quiz-id" value="{{quid.id}}" id="quiz-form">
+  <form action="{% url 'quizzes:result' %}" method="post"  name="quiz-id" value="{{quid.id}}" id="quiz-form">
     {% csrf_token %}
     <input type="hidden" name="quiz-id" value="{{quiz.id}}">
 	<div id="form-header">

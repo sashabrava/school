@@ -123,8 +123,6 @@ def quiz(request,pk):
         s = SessionStore()
         s.create()
         request.session = s
-    
-
 
     quiz = Quiz.objects.get(pk=pk)
     if not request.user.is_authenticated and quiz.auth_required == True:
@@ -132,7 +130,7 @@ def quiz(request,pk):
         return redirect('login')
     context = {'quiz':quiz}
     print(context)
-    return render(request, 'quizes/quiz.html', context)
+    return render(request, 'quizzes/quiz.html', context)
 
 def edit_quiz(request,pk):
     # page for editing quiz
@@ -238,7 +236,7 @@ def correct_replies(request, pk):
     user_result.quiz = Quiz.objects.get(pk=pk)
     context = {}
     context = {'result':user_result}
-    return render(request, 'quizes/result.html', context)
+    return render(request, 'quizzes/result.html', context)
 
 class UserResultPdf(View):
     # View, which renders test results in PDF format
