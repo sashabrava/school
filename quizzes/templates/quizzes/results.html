@@ -1,0 +1,70 @@
+{% extends "main_pages/base.html" %}
+  {% block title %}<h1>Results</h1>{% endblock %}
+  {% block content %}
+    <div class = "container">
+      <div class="row">
+
+      {% for result in user_results %}
+        <div class="col-4 result" id="result-{{result.id}}">
+          <h5 >{{result.quiz.title}}</h5>
+          <p >{{result.quiz.description}}</p>
+          <p>Date: {{ result.date|date:"M d, Y" }}</p>
+          {% for question in result.quiz.questions.all %}
+			{% if forloop.counter0 < 4 %}
+            <div class="quiz">
+              <p id="question-{{question.id}}" class="question">{{ forloop.counter }}. {{question.title}}</p>
+              <div class="row">
+              {% for reply in question.reply_set.all %}
+				
+                <div class="col-6 form-check">
+                  <input type="checkbox" id="checkbox-{{question.id}}-{{reply.id}}"name="checkbox-{{question.id}}-{{reply.id}}" disabled 
+                  {% if reply in result.replies.all %}checked 
+                    {% if reply not in question.correct_replies %}
+                      class="question-wrong"
+                    {% endif %}  
+                  {% endif %}
+                  {% if reply in question.correct_replies %}
+                    {% if reply not in result.replies.all %}
+                      class="question-correct-unchosen"
+                    {% else %}
+                      class="question-correct"
+                    {% endif %}
+
+                    
+                  {% endif %}  
+                  >
+                  <label for="checkbox-{{question.id}}-{{reply.id}}">{{reply.title}}</label>
+                </div>
+              {% empty %}
+                <div class="col"><p>No replies available</p></div>
+              {% endfor %}
+              </div>
+            </div>
+			{% elif forloop.last %}
+				<div  >
+					<a href="{% url 'quizes:user-result' pk=result.id %}" class="btn btn-primary">Show full</a>
+					<a class="btn btn-primary" href="{% url 'quizes:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
+				</div>
+			{% endif %}
+          {% endfor %}
+        </div>
+      {% empty %}    
+        <p>You have no results. Please take a quiz or log in.</p>
+      {% endfor %}
+
+      </div>
+    </div>
+   {% endblock %}
+{% block additional %}
+<style>
+.result{
+background-color: rgba(0, 0, 255, 0.1);
+margin:1rem;
+}
+</style>
+<script type="text/javascript">
+  $("input.question-wrong").parent().css("background-color", "rgba(255, 0, 0, 0.5)");
+    $("input.question-correct, input.question-correct-unchosen").parent().css("background-color", "rgba(0, 255, 0, 0.5)");
+    $("input.question-correct-unchosen").parent().find("label").css("font-weight","Bold");
+</script>
+{% endblock %}

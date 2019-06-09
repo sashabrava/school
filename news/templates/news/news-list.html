@@ -1,0 +1,23 @@
+{% extends "main_pages/base.html" %}
+  {% block title %}<h1>News</h1>{% endblock %}
+  {% block content %}
+  <div class="row">
+
+    {% for news in news_list %}
+    
+    <div class="col-6">  
+      
+      <div class="card" style="width: 18rem;"> 
+        <img class="card-img-top" src="{{news.picture.url}}" alt="Post image">
+          <div class="card-body">
+          <h5 class="card-title">{{news.title}}</h5>
+          <a href="{% url 'news:news' pk=news.id %}" class="btn btn-primary">Read</a>
+        </div>
+    </div>
+  </div>
+  {% empty %}    
+  <p>No news are available.</p>
+  {% endfor %}
+
+</div>
+   {% endblock %}

@@ -1,0 +1,46 @@
+<html>
+<head>
+  {% include "basic/head.html" %} 
+</head>
+{% load static %}
+<body>
+  {% include "basic/navbar.html" %}
+  {% block title %}Base title{% endblock %}
+  {% block content %}{% endblock %}
+  {% include "basic/footer.html" %} 
+  </body>
+<style>
+body::after {
+  content: "";
+  background: url("/static/background.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  opacity: 0.5;
+  filter: blur(4px) brightness(1.2);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: -1;   
+}
+.navbar {
+  background-color: rgba(255,255,255,0.3);
+}
+.footer {
+  position: fixed;
+   left: 0;
+  bottom: 0;
+   width: 100%;
+  background-color: rgba(0,0,255,0.3);
+  color: white;
+  text-align: center;
+}
+h1{
+  text-align:center;
+}
+</style>
+</html>
+{% block additional %}
+{% endblock %} 
+

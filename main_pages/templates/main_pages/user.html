@@ -1,0 +1,45 @@
+{% extends "pages/base.html" %}
+  {% block title %}<h1>Contacts</h1>{% endblock %}
+  {% block content %}
+	<form method="post">
+	{% csrf_token %}
+<div class="col-8">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" class="form-control" id="username"  aria-describedby="usernameHelp" disabled value="{{user.username}}">
+    <small id="usernameHelp" class="form-text text-muted">Only administrator can change it.</small>
+  </div>
+      <div class="form-group">
+    <label for="exampleInputFirstName">First name</label>
+    <input type="text" class="form-control" id="firstName" name="first_name" aria-describedby="firstHelp" value="{{user.first_name}}">
+    <small id="firstNameHelp" class="form-text text-muted">Type your first name here.</small>
+  </div>
+    <div class="form-group">
+    <label for="exampleInputLastName">Last name</label>
+    <input type="text" class="form-control" id="lastName" name ="last_name" aria-describedby="lastNameHelp" value="{{user.last_name}}">
+    <small id="lastNameHelp" class="form-text text-muted">Type your last name here.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Your groups</label>
+	{% if student_profile %}
+	
+	    <select class="form-control" id="exampleFormControlSelect1" multiple disabled>
+		{% for student_group in student_profile.student_groups.all %}
+      <option>{{student_group}}</option>
+		{% endfor %}
+    </select>
+	{% endif %}
+  </div>
+
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email" value="{{user.email}}">
+    <small id="emailHelp" class="form-text text-muted">Please type your email here.</small>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<div>
+<a href="{% url 'pages:user-delete' %}" class="btn btn-danger">Delete user</a>
+</div>
+</div>	
+  {% endblock %}

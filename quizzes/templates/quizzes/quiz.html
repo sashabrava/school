@@ -1,0 +1,88 @@
+{% extends "pages/base.html" %}
+
+  {% block title %}<h1>Tests</h1>{% endblock %}  
+  {% block content %}
+  {% if quiz %}
+  <div class = "container">
+  <form action="{% url 'quizes:result' %}" method="post"  name="quiz-id" value="{{quid.id}}" id="quiz-form">
+    {% csrf_token %}
+    <input type="hidden" name="quiz-id" value="{{quiz.id}}">
+	<div id="form-header">
+		<h4>{{quiz.title}}</h4>
+		<p>{{quiz.description}}</p>
+	</div>
+    {% for question in quiz.questions.all %}
+	<div class="quiz">
+		<p id="question-{{question.id}}">{{ forloop.counter }}. {{question.title}}</p>
+		<div class="row">
+		{% for reply in question.reply_set.all %}
+			<div class="col-6 form-check">
+			<input type="checkbox" id="checkbox-{{question.id}}-{{reply.id}}"name="checkbox-{{question.id}}-{{reply.id}} ">
+			<label for="checkbox-{{question.id}}-{{reply.id}}">{{reply.title}}</label>
+			</div>
+		{% empty %}
+			<div class="col"><p>No replies available</p></div>
+		{% endfor %}
+		</div>
+	</div>
+    {% endfor %}
+    <button id="submit" type="submit" class="btn btn-outline-primary">Submit</button>
+  </form>
+  </div>
+  {% else %}
+  <p>This quiz does not exist</p>
+  {% endif %}
+  {{results_checked}}
+  {% endblock %} 
+
+{% block additional %}
+<style>
+#submit{
+margin:1rem;
+}
+#form-header{
+margin:1rem;
+padding:1rem;
+}
+.quiz{
+background-color: rgba(0, 0, 255, 0.1);
+margin:1rem;
+padding:1rem;
+}
+</style>
+<script type="text/javascript">
+  var result={{results_checked | safe}}
+  console.log(result)
+  for (var key in result){
+    console.log( key, result[key] );
+    if (result[key] == 0)
+      $("#question-" + key).css("background-color", "green");
+    else if (result[key] == 1)
+      $("#question-" + key).css("background-color", "yellow");
+    else if (result[key] == 2)
+      $("#question-" + key).css("background-color", "red");
+  }
+  $('#quiz-form').submit(function(e){
+    e.preventDefault();
+    url = $(this).attr('action') // to get url
+    data = $(this).serialize(); // for sending form data 
+    $.post(url, data, function(response){
+          // do whatever you want with response(data)
+          for (var key in response.results_checked){
+           if (response.results_checked[key] == 0)
+            $("#question-" + key).parent().css("background-color", "rgba(0,255,0,0.5)");
+          else if (response.results_checked[key] == 1)
+            $("#question-" + key).parent().css("background-color", "rgba(255,255,0,0.5)");
+          else if (response.results_checked[key] == 2)
+            $("#question-" + key).parent().css("background-color", "rgba(255,0,0,0.5)");
+        }
+        $("#submit").remove()
+		  //print(data)
+		  $("input[id^=checkbox-]").each(function(){
+                        //this = current collapse-label
+                        $(this).prop('disabled', true);
+                      });
+    })
+  })
+</script>
+  {% endblock %} 

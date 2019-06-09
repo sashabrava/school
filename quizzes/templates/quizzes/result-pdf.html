@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quiz Result</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        .question-correct-unchosen{
+        	font-weight:bold;
+        	text-decoration:underline
+        }
+        .question-correct{
+
+        }
+     </style>
+
+ </head>
+ <body>
+ 	{% load static %}
+ 	<!--img src="http://localhost:8000/static/logo_access.png"-->
+ 	      {% if result %}
+        <div class="col-11 col-sm-9 col-md-8 col-lg-7 result" id="result-{{result.id}}">
+          <h5 >{{result.quiz.title}}</h5>
+          <p >{{result.quiz.description}}</p>
+          <p>Date: {{ result.date|date:"M d, Y" }}</p>
+          {% for question in result.quiz.questions.all %}
+            <div class="quiz">
+              <p id="question-{{question.id}}" class="question">{{ forloop.counter }}. {{question.title}}</p>
+              <div class="row">
+              {% for reply in question.reply_set.all %}
+                <div class="col-6 form-check">
+
+                  <label for="checkbox-{{question.id}}-{{reply.id}}"
+                  {% if reply in question.correct_replies %}
+                    {% if reply not in result.replies.all %}
+                      class="question-correct-unchosen"
+                    {% endif %}
+                  {% endif %}  
+                  >
+                  	{% if reply in result.replies.all %}
+                  		☑
+                  	{% else %}
+                  		❒
+                  	{% endif %}  
+              		{{reply.title}}
+              		 {% if reply in result.replies.all %}checked 
+                    {% if reply not in question.correct_replies %}
+                      ✘
+                    {% else %}
+                      ✔
+                    {% endif %}
+
+                  {% endif %}
+          			</label>
+                </div>
+              {% empty %}
+                <div class="col"><p>No replies available</p></div>
+              {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}    
+        <p>You have chosen invalid result</p>
+      {% endif %}
+
+     <script type="text/javascript">
+     	$("input.question-wrong").parent().find("label").css("text-decoration","line-through");
+      	$("input.question-correct").parent().find("label").append("✔");
+      	$("input.question-correct-unchosen").parent().find("label").css("font-weight","bold").css("text-decoration","underline");
+     </script>
+ </body>
+ </html>

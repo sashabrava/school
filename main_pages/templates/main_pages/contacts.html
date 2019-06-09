@@ -1,0 +1,37 @@
+{% extends "main_pages/base.html" %}
+  {% block title %}<h1>Contacts</h1>{% endblock %}
+  {% block content %}
+<div class="container">
+  <div class="row">
+  	  <div class="col-sm-11 cold-md-5 col-lg-5 contacts card">
+
+  <div class="card-body">
+    <h5 class="card-title">Mr. Teacher</h5>
+    <h6 class="card-subtitle mb-2 text-muted">Country, address, street, house</h6>
+    <p class="card-text">email@example.com</p>
+	<p class="card-text">+12345678 Phone number</p>
+  </div>
+       </div>
+       <div class="col-sm-11 cold-md-5 col-lg-5 map">
+	   <div class="embed-responsive embed-responsive-21by9">
+<iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=17.028808593750004%2C50.8267584823633%2C35.37597656250001%2C56.74669909639952&amp;layer=mapnik" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/#map=7/53.891/26.202">View Larger Map</a></small>
+</div>
+        </div>
+      </div>
+   </div>
+   {% endblock %}
+   {% block additional %}
+<style>
+.contacts{
+background-color: rgba(0, 0, 255, 0.1) ;
+padding-right: 0px;
+    padding-left: 0px;
+	margin:5px;
+}
+.map{
+padding-right: 0px; 
+padding-left: 0px; 
+margin:5px;
+{
+</style>
+{% endblock %} 

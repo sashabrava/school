@@ -1,0 +1,66 @@
+{% extends "pages/base.html" %}
+  {% block title %}<h1>Results</h1>{% endblock %}
+  {% block content %}
+    <div class = "container">
+      <div class="row justify-content-center">
+
+      {% if result %}
+        <div class="col-11 col-sm-9 col-md-8 col-lg-7 result" id="result-{{result.id}}">
+          <h5 >{{result.quiz.title}}</h5>
+          <p >{{result.quiz.description}}</p>
+          <p>Date: {{ result.date|date:"M d, Y" }}</p>
+          {% for question in result.quiz.questions.all %}
+            <div class="quiz">
+              <p id="question-{{question.id}}" class="question">{{ forloop.counter }}. {{question.title}}</p>
+              <div class="row">
+              {% for reply in question.reply_set.all %}
+                <div class="col-6 form-check">
+                  <input type="checkbox" id="checkbox-{{question.id}}-{{reply.id}}"name="checkbox-{{question.id}}-{{reply.id}}" disabled 
+                  {% if reply in result.replies.all %}checked 
+                    {% if reply not in question.correct_replies %}
+                      class="question-wrong"
+                    {% endif %}  
+                  {% endif %}
+                  {% if reply in question.correct_replies %}
+                    {% if reply in result.replies.all %}
+                      class="question-correct"
+                      
+                    {% else %}
+                      class="question-correct-unchosen"
+                    {% endif %}
+
+                    
+                  {% endif %}  
+                  >
+                  <label for="checkbox-{{question.id}}-{{reply.id}}">{{reply.title}}</label>
+                </div>
+              {% empty %}
+                <div class="col"><p>No replies available</p></div>
+              {% endfor %}
+              </div>
+            </div>
+          {% endfor %}
+        {% if result.id %}
+          <a class="btn btn-outline-primary" href="{% url 'quizes:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
+        {% endif %}
+        </div>
+
+      {% else %}    
+        <p>You have chosen invalid result</p>
+      {% endif %}
+      </div>
+    </div>
+   {% endblock %}
+{% block additional %}
+<style>
+.result{
+background-color: rgba(0, 0, 255, 0.1);
+margin:1rem;
+}
+</style>
+<script type="text/javascript">
+  $("input.question-wrong").parent().css("background-color", "rgba(255, 0, 0, 0.5)");
+    $("input.question-correct, input.question-correct-unchosen").parent().css("background-color", "rgba(0, 255, 0, 0.5)");
+    $("input.question-correct-unchosen").parent().find("label").css("font-weight","Bold");
+</script>
+{% endblock %}

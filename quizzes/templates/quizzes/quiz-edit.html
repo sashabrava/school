@@ -1,0 +1,87 @@
+{% extends "main_pages/base.html" %}
+
+  {% block title %}<h1>Editing Quiz {{quiz.id}}. {{quiz.title}}</h1> {% endblock %}
+  {% block content %}
+  <div class="container">
+  <form action="{% url 'quizzes:edit-quiz' pk=quiz.id %}" method="post"  name="quiz-id" value="{{quid.id}}" id="quiz-form">
+    {% csrf_token %}
+    <input type="hidden" name="quiz-id" value="{{quiz.id}}">
+	<div class="form-group">
+		<label for="quiz-title">Title</label>
+		<input type="text" class="form-control" id="quiz-title" name="quiz-title" minlength="4" size="20" value="{{quiz.title}}">
+	</div>
+	<div class="form-group">
+		<label for="quiz-description">Description</label>
+		<input type="text" class="form-control" id="quiz-description" name="quiz-description" minlength="4" size="20" value="{{quiz.description}}">
+	</div>
+	<div>
+		<label>Added questions</label>
+	</div>
+    {% for question_added in quiz.questions.all %}
+	
+	<div class="row">
+		<div class="col-6">
+			<input type="text" class="form-control" name="question-added-{{question_added.id}}" id="question-added-{{question_added.id}}" value="{{question_added.title}}" readonly>
+		</div>
+		<div class="col-2">
+			<button type="button" id="but-question-added-{{question_added.id}}" class="btn btn-sm btn-outline-dark">-</button>
+		</div>
+	</div>
+    {% empty %}
+    <div>
+		<label > No questions added </label>
+	</div>
+    {% endfor %}
+	<div>
+		<label> Not added questions</label>
+	</div>
+    {% for question_unused in questions_unused.all %}
+	<div class="row">
+		<div class="col-6">
+			<input type="text" class="form-control" name="question-unused-{{question_unused.id}}" id="question-unused-{{question_unused.id}}" value="{{question_unused.title}}" readonly>
+		</div>
+		<div class="col-2">
+			<button type=button id="but-question-unused-{{question_unused.id}}" class="btn btn-sm btn-outline-dark">+</button>
+		</div>
+	</div>
+    {% empty %}
+    <label > No unadded questions</label>
+    {% endfor %}
+	<div style="margin:1rem">
+	</div>
+	<button type="submit"class="btn btn-outline-primary">Submit</button>
+	
+  </form>
+  </div>
+  {% endblock %}
+{% block additional %}
+<script>
+  function set_buttons_oblick(){
+    $("button[id^=but-question-added-]").each(function(){
+      $(this).unbind('click');
+      $(this).click(function() {
+        console.log( $( this ).text() );
+        var id_added = $(this).attr("id").replace(/but-question-added-/g,'');
+        $("#question-added-" + id_added).css("background-color", 'rgba(255, 0, 0, 0.5)');
+        $("#question-added-" + id_added).attr("name","question-unused-" + id_added).attr("id","question-unused-" + id_added);
+        $("#but-question-added-" + id_added).attr("id","but-question-unused-" + id_added);
+        
+        set_buttons_oblick();
+      });
+    });
+    $("button[id^=but-question-unused-]").each(function(){
+      $(this).unbind('click');
+      $(this).click(function() {
+        console.log( $( this ).text() );
+        var id_unused = $(this).attr("id").replace(/but-question-unused-/g,'');
+        $("#question-unused-" + id_unused).css("background-color", 'rgba(0, 255, 0, 0.5)');
+        $("#question-unused-" + id_unused).attr("name","question-added-" + id_unused).attr("id","question-added-" + id_unused);
+        $("#but-question-unused-" + id_unused).attr("id","but-question-added-" + id_unused);
+        $(this).unbind('click');
+        set_buttons_oblick();
+      });
+    });
+  }
+  set_buttons_oblick();
+</script>
+{% endblock %}

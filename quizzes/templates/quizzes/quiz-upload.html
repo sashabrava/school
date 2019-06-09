@@ -1,0 +1,39 @@
+{% extends "main_pages/base.html" %}
+  {% block title %}<h1>Upload test</h1>{% endblock %}  
+{% block content %}
+  <form method="post" enctype="multipart/form-data" id="upload-form" style="padding: 1rem;">
+    {% csrf_token %}
+    <input type="file" name="myfile">
+    <button type="submit" id="submit">Upload</button>
+  </form>
+ <div id="upload-log" style='white-space: pre; padding: 1rem; background-color: rgba(0, 0, 255, 0.1);'>Status</div>
+  {% if uploaded_file_url %}
+    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+  {% endif %}
+
+  <p></p>
+{% endblock %}
+{% block additional %}
+<script>
+  $('#upload-form').submit(function(e){
+    e.preventDefault();
+	var formData = new FormData(this);
+	    $.ajax({
+        url: window.location.pathname,
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+			console.log(data.upload)
+            $("div#upload-log").text(data.upload);
+        },
+		error: function (xhr, desc, err)
+        {
+		alert("Error. Please, contact system administrator");
+		},
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+  })
+</script>
+{% endblock %}

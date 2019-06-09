@@ -1,0 +1,53 @@
+{% extends "main_pages/base.html" %}
+
+  {% block title %}<h1>Tests</h1> {% endblock %} 
+  {% block content %}
+ 
+  <div class="container">
+   {% if user.is_superuser %}
+    <h4 style='text-align:center;'>Category: <b>All tests</b></h4>
+    <a href="{% url 'quizzes:quiz-upload' %}" class="btn btn-secondary">Upload new</a>
+   {% elif user_profile.student_groups %} 
+		<h4 style='text-align:center;'>Category: <b>
+			{% for student_group in user_profile.student_groups.all %} 
+			{{student_group.title}} </b>
+			{% endfor %}
+			</h4>
+
+	{% else %} <h4 style='text-align:center;'>Category: <b>Guest</b></h4>
+   {% endif %}
+  <div class="row">
+
+    {% for quiz in quizzes %}
+    
+    <div class="col-11 col-md-4 col-lg-3 quiz-short" style='display: flex;flex-direction:column' >  
+       
+        <div ><h5>{{quiz.title}}</h5></div>
+		{%if quiz.student_groups.all %}<div>Category: {% for student_group in quiz.student_groups.all %} {{student_group.title}} {% endfor %} </div>{% endif%}
+        <div style="flex: 1;" ><p class="text-justify">{{quiz.description}}</p></div>
+        <div  ><a href="{% url 'quizzes:quiz' pk=quiz.id %}" class="btn btn-primary">Start</a>
+          {% if user.is_superuser %}
+            <a href="{% url 'quizzes:correct-replies' pk=quiz.id %}" class="btn btn-danger">Replies</a>
+            <a href="{% url 'quizzes:edit-quiz' pk=quiz.id %}" class="btn btn-warning">Edit</a>
+          {% endif %}
+        </div>
+      
+  </div>
+  {% empty %}    
+  <p>No quizzes are available.</p>
+  {% endfor %}
+
+</div>
+</div>
+{% endblock %} 
+{% block additional %}
+<style>
+.quiz-short{
+background-color: rgba(0, 0, 255, 0.1);
+margin: 1rem;
+padding: 1rem;
+border-radius: .25rem;
+border: 1px solid rgba(0,0,0,.125);
+}
+</style>
+{% endblock %} 

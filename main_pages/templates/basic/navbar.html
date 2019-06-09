@@ -1,0 +1,34 @@
+<nav class="navbar navbar-light navbar-expand-sm " style="background-color: #e3f2fd;">
+  <a class="navbar-brand" href="{% url 'main_pages:index' %}">School</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main_pages:index' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'quizzes:quizzes' %}">Tests</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main_pages:contacts' %}">Contacts</a>
+      </li>
+	  <li class="nav-item active">
+        <a class="nav-link" href="{% url 'news:news-list' %}">News</a>
+      </li>
+	  	  {% if user.is_authenticated %}
+		  <span class="navbar-text">
+		{{ user.get_username }}
+		</span>
+		<a class="nav-link active"  href="{% url 'quizzes:user-results' %}">My tests</a>
+		
+		<a class="nav-link active" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+	{% else %}
+		<a class="nav-link active" href="{% url 'login' %}?next={{request.path}}">Login</a>
+	{% endif %}
+      </li>
+	  
+    </ul>
+  </div>
+</nav>
