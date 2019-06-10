@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/sashabrava/school.svg?branch=master)](https://travis-ci.org/sashabrava/school)
 # school
 
 Test school website written on Django framework.
