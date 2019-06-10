@@ -1,0 +1,4 @@
+Django==2.1.7
+djangorestframework==3.9.2
+xhtml2pdf==0.2.3
+lxml==4.3.2
