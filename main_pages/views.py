@@ -33,9 +33,9 @@ def edit_user(request):
         try:
             student_profile = StudentProfile.objects.get(user=request.user)
             context['student_profile'] = student_profile
-        except SomeModel.DoesNotExist:
+        except StudentProfile.DoesNotExist:
             student_profile = None
-        return render(request, 'main_pages/user.html', context)
+        return render(request, 'main_pages/user-edit.html', context)
 
 def delete_user(request):
     # Page to remove user

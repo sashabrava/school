@@ -1,4 +1,4 @@
-{% extends "pages/base.html" %}
+{% extends "main_pages/base.html" %}
   {% block title %}<h1>Contacts</h1>{% endblock %}
   {% block content %}
 	<form method="post">
@@ -39,7 +39,7 @@
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <div>
-<a href="{% url 'pages:user-delete' %}" class="btn btn-danger">Delete user</a>
+<a href="{% url 'main_pages:user-delete' %}" class="btn btn-danger">Delete user</a>
 </div>
 </div>	
   {% endblock %}
