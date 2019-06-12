@@ -8,16 +8,6 @@ def handler404(request, exception):
 def handler500(request):
     return render(request, 'pages/500.html', status=500)
 
-def index(request):
-    # Main page
-    context = {}
-    return render(request, 'main_pages/index.html', context)
-
-def contacts(request):
-    # Contacts page
-    context = {}
-    return render(request, 'main_pages/contacts.html', context)
-
 @login_required
 def edit_user(request):
     # Page for editing user data from StudentProfile class
