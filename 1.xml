@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<quiz title="Math test">
+    <question title="Multiply 2*2">
+        <reply>2</reply>
+        <reply>3</reply>
+        <reply>6</reply>
+        <reply correct="True">4</reply>
+    </question>
+	    <question title="Divide 116/4">
+        <reply>19</reply>
+        <reply>13</reply>
+        <reply>25</reply>
+        <reply correct="True">29</reply>
+    </question>
+</quiz>

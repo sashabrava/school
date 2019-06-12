@@ -17,6 +17,9 @@
 	  <li class="nav-item active">
         <a class="nav-link" href="{% url 'news:news-list' %}">News</a>
       </li>
+
+      </ul>
+    <ul class="navbar-nav ml-auto">
 	  	  {% if user.is_authenticated %}
 		  <span class="navbar-text">
 		{{ user.get_username }}
@@ -27,7 +30,7 @@
 	{% else %}
 		<a class="nav-link active" href="{% url 'login' %}?next={{request.path}}">Login</a>
 	{% endif %}
-      </li>
+
 	  
     </ul>
   </div>

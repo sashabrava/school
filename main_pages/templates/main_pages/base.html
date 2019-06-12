@@ -5,11 +5,22 @@
 {% load static %}
 <body>
   {% include "basic/navbar.html" %}
+   <main>
   {% block title %}Base title{% endblock %}
-  {% block content %}{% endblock %}
+    <div class="container">
+     {% block content %}{% endblock %}
+    </div>
+   </main>
   {% include "basic/footer.html" %} 
   </body>
 <style>
+ body{
+  overflow: hidden;
+ }
+ main {
+    max-height: calc(100% - 6rem);
+    overflow-y: auto;
+ }
 body::after {
   content: "";
   background: url("/static/background.jpg");
@@ -32,7 +43,7 @@ body::after {
    left: 0;
   bottom: 0;
    width: 100%;
-  background-color: rgba(0,0,255,0.3);
+  background-color: rgb(148,161,149);
   color: white;
   text-align: center;
 }
