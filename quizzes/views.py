@@ -132,6 +132,7 @@ def quiz(request,pk):
     print(context)
     return render(request, 'quizzes/quiz.html', context)
 
+@staff_member_required
 def edit_quiz(request,pk):
     # page for editing quiz
     if request.method == 'GET':
