@@ -12,6 +12,8 @@ class QuizzesViewTest(TestCase):
         check_url(self, "quizzes:quizzes")
         check_url(self, "quizzes:quiz", 200, pk=1)
         check_url(self, "quizzes:edit-quiz", 302, pk=1)
+        check_url(self, "quizzes:admin-results", 302)
+        check_url(self, "quizzes:user-results", 302)
         c = Client()
         with open(os.path.dirname(__file__) + "/../1.xml") as fp:
             response = c.post("/quizzes/upload", {'myfile': fp})

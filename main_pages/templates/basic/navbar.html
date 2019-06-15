@@ -24,8 +24,12 @@
 		  <span class="navbar-text">
 		{{ user.get_username }}
 		</span>
-		<a class="nav-link active"  href="{% url 'quizzes:user-results' %}">My tests</a>
-		
+      <a class="nav-link active"  href="{% url 'main_pages:user-edit' %}">Edit</a>
+		<a class="nav-link active"  href="{% url 'quizzes:user-results' %}">My results</a>
+		    {% if request.user.is_staff %}
+    <a class="nav-link active"  href="{% url 'quizzes:admin-results' %}" style="color:#ad0000">All results</a>
+        <a class="nav-link active"  href="{% url 'admin:index' %}" style="color:#ad0000">Admin</a>
+        {% endif %}
 		<a class="nav-link active" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
 	{% else %}
 		<a class="nav-link active" href="{% url 'login' %}?next={{request.path}}">Login</a>

@@ -19,6 +19,9 @@ from django.conf import settings
 from lxml import etree
 from io import StringIO
 from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from django.http import Http404
 STATUS_CORRECT = 0
 STATUS_PARTLY_CORRECT = 1
 STATUS_WRONG = 2
@@ -224,11 +227,31 @@ def user_results(request):
 @login_required
 def user_result(request, pk):
     # Page for showing details of single user Result
-    user_result = Result.objects.filter(user=request.user, pk=pk)
+    user_result = get_object_or_404(Result,pk=pk)#Result.objects.filter(user=request.user, pk=pk)
     context = {}
-    if len(user_result) == 1:
-        context = {'result':user_result[0]}
-    return render(request, 'quizes/result.html', context)
+    if user_result.user == request.user or request.user.is_staff:
+        context = {'result':user_result}
+        return render(request, 'quizzes/result.html', context)
+    raise Http404("You don't have necessary permissions to view this page")
+
+@staff_member_required
+def admin_results(request):
+    # Page for showing Results of all users
+    user = request.GET.get('user','')
+    quiz = request.GET.get('quiz','')
+    user_list = User.objects.all()
+    quiz_list = Quiz.objects.all()
+    admin_results = Result.objects.all()
+    if user.isnumeric():
+        admin_results = admin_results.filter(user=get_object_or_404(User, pk=int(user)))
+    elif user != "":
+        raise Http404("Wrong ID of user")   
+    if quiz.isnumeric():
+        admin_results = admin_results.filter(quiz=get_object_or_404(Quiz, pk=int(quiz)))
+    elif quiz != "":
+        raise Http404("Wrong ID of quiz")   
+    context = {'admin_results': admin_results, 'user_list': user_list, 'quiz_list': quiz_list}
+    return render(request, 'quizzes/results-admin.html', context)
 
 @staff_member_required
 def correct_replies(request, pk):

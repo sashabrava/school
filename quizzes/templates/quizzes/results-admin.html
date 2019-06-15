@@ -1,0 +1,62 @@
+{% extends "main_pages/base.html" %}
+  {% block title %}<h1>Results</h1>{% endblock %}
+  {% block content %}
+ <form  action={% url 'quizzes:admin-results'%} method="get">
+  <label for="select-quiz">Quiz:</label>
+  <select class="form-control" id="select-quiz" name="quiz">
+    <option value="">all</option>
+    {% for quiz in quiz_list %}
+	<option value="{{quiz.id}}">{{quiz.title}}</option>
+	{% endfor %}
+  </select>
+    <label for="select-user">User:</label>
+  <select class="form-control" id="select-user" name="user">
+    <option value="">all</option>
+    {% for user in user_list %}
+	<option value="{{user.id}}">{{user.username}}</option>
+	{% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form> 
+  
+  
+<table class="table" style="background-color: rgba(0, 0, 255, 0.1)">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Date</th>
+      <th scope="col">User</th>
+      <th scope="col">Quiz</th>
+	  <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for result in admin_results %}
+    <tr>
+      <th scope="row">{{result.id}}</th>
+      <td>{{result.date}}</td>
+      <td>{{result.user}}</td>
+      <td>{{result.quiz}}</td>
+	  <td><a href="{% url 'quizzes:user-result' result.id %}" class="btn btn-primary" role="button">Open</a></td>
+    </tr>
+      {% empty %}    
+ 
+     <p>No results are available. </p>
+  
+  {% endfor %}
+  </tbody>
+</table>  
+   {% endblock %}
+{% block additional %}
+<style>
+.result{
+background-color: rgba(0, 0, 255, 0.1);
+margin:1rem;
+}
+</style>
+<script>
+{% if request.GET.quiz %} document.getElementById("select-quiz").selectedIndex = {{request.GET.quiz}} {% endif %}
+{% if request.GET.user %} document.getElementById("select-user").selectedIndex = {{request.GET.user}} {% endif %}
+</script>
+
+{% endblock %}
