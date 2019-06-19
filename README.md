@@ -21,10 +21,13 @@ Administrators can see correct Replies on Quizzes
 
 <img src="https://user-images.githubusercontent.com/11160215/59548886-e0566680-8f5d-11e9-96c2-36ea61354024.PNG" alt="correct-replies" width="50%" />
 
-
 Administrators can see all Quizzes Results and filter them by Quiz and User.
 
 <img src="https://user-images.githubusercontent.com/11160215/59548884-e0566680-8f5d-11e9-9110-99f64f7d7275.PNG" alt="admin-results" width="50%" />
+
+Administrator can see all Quizzes Results using Django REST page with django_filter.
+
+<img src="https://user-images.githubusercontent.com/11160215/59737096-f5384000-9264-11e9-9da2-b1265ff3fce3.PNG" alt="admin-results-api" width="50%" />
 
 Administrator can upload new Quizzes, created in XML format (example file for upload is 1.xml in the root of project)
 
