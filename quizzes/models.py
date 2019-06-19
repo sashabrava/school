@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import Q
-from rest_framework import serializers
 from django.contrib.auth.models import User
 from main_pages.models import StudentGroup
 
@@ -45,7 +44,4 @@ class Result(models.Model):
     def __str__(self):
         return str(self.id) + ". Quiz " + self.quiz.title + str(self.date )
 
-class QuizModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quiz
-        fields = "__all__"
+

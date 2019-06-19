@@ -12,6 +12,7 @@ path('result/', views.result, name='result'),
 path('edit/<int:pk>/', views.edit_quiz, name='edit-quiz'),
 path('user/results', views.user_results, name='user-results'),
 path('admin/results', views.admin_results, name='admin-results'),
+path('admin/results/api', views.AdminResultsApi.as_view(), name='admin-results-api'),
 path('user/result/<int:pk>/', views.user_result, name='user-result'),
 path('user/result/<int:pk>/pdf', views.UserResultPdf.as_view(), name='user-result-pdf'),
 ]

@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Quiz,Question,Reply,Result,QuizModelSerializer
+from .models import Quiz, Question, Reply, Result
+from .serializers import QuizModelSerializer, ResultSerializer
 from main_pages.models import StudentGroup,StudentProfile
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -22,9 +23,17 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.http import Http404
+from rest_framework import generics, permissions
+import django_filters.rest_framework 
 STATUS_CORRECT = 0
 STATUS_PARTLY_CORRECT = 1
 STATUS_WRONG = 2
+class AdminResultsApi(generics.ListCreateAPIView):
+    queryset = Result.objects.all()
+    serializer_class = ResultSerializer
+    permission_classes = (permissions.IsAdminUser, )
+    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
+    filterset_fields = ('replies', 'quiz','user')
 
 def quizzes(request):
     '''
