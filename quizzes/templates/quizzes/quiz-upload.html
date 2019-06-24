@@ -3,7 +3,7 @@
 {% block content %}
   <form method="post" enctype="multipart/form-data" id="upload-form" style="padding: 1rem;">
     {% csrf_token %}
-    <input type="file" name="myfile">
+    <input type="file" name="myfile" required />
     <button type="submit" id="submit">Upload</button>
   </form>
  <div id="upload-log" style='white-space: pre; padding: 1rem; background-color: rgba(0, 0, 255, 0.1);'>Status</div>

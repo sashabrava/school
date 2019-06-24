@@ -75,55 +75,58 @@ def quiz_upload(request):
 
     if request.method == 'POST':
         result_string = "" # will contain the log of creating new quiz
-        myfile = request.FILES['myfile']
-        str_text = '' # will contain full text of uploaded file
-        for line in myfile:
-            str_text = str_text + line.decode()
-        tree = etree.parse(StringIO(str_text)) # the free of XML document		
-        root = tree.getroot()
-        try:
-            if root.tag == 'quiz': # main XML tag must be quiz 
-                result_string += "Quiz {}{}".format(root.attrib["title"], '\n')
-                if Quiz.objects.filter(title=root.attrib["title"]).count() > 0:
-                    raise QuizExistsException # if qiuiz with same title exists - abort.
-                quiz = Quiz.objects.create()
-                quiz.title = root.attrib["title"]
-                # find StudentGroup for quiz
-                if 'group' in root.attrib:
-                    student_group_list = StudentGroup.objects.filter(title=root.attrib["group"] )
-                    student_group = None
-                    if student_group_list.count() == 1:
-                        student_group = student_group_list[0]
-                        quiz.student_groups.add(student_group)
-                    else:
-                        result_string += 'Please, check Student Group on error' + '\n'
+        myfile = request.FILES.get('myfile', False)
+        if not myfile: #quit on missing file
+            result_string += "Please upload a file. {}".format('\n')
+        else:
+            str_text = '' # will contain full text of uploaded file
+            for line in myfile:
+                str_text = str_text + line.decode()
+            tree = etree.parse(StringIO(str_text)) # the free of XML document		
+            root = tree.getroot()
+            try:
+                if root.tag == 'quiz': # main XML tag must be quiz 
+                    result_string += "Quiz {}{}".format(root.attrib["title"], '\n')
+                    if Quiz.objects.filter(title=root.attrib["title"]).count() > 0:
+                        raise QuizExistsException # if qiuiz with same title exists - abort.
+                    quiz = Quiz.objects.create()
+                    quiz.title = root.attrib["title"]
+                    # find StudentGroup for quiz
+                    if 'group' in root.attrib:
+                        student_group_list = StudentGroup.objects.filter(title=root.attrib["group"] )
+                        student_group = None
+                        if student_group_list.count() == 1:
+                            student_group = student_group_list[0]
+                            quiz.student_groups.add(student_group)
+                        else:
+                            result_string += 'Please, check Student Group on error' + '\n'
 
-                # loop across questions - child evements of root ("quiz") element
-                for child in root:
-                    result_string += "{} {} {}".format(child.tag, child.attrib, '\n')
-                    question_list = Question.objects.filter(title=child.attrib["title"])			
-                    if question_list.count() > 0: 
-                        result_string += "Question {} exists {}".format(child.attrib["title"], '\n')
-                        if question_list.count() == 1: # avoid duplicate questions
-                            result_string += "Question  {} will be chosen instead of importable {}".format(question_list[0].id,'\n')
-                            quiz.questions.add(question_list[0])
-                        continue;
-                    question = Question.objects.create()
-                    question.title = child.attrib["title"]
-                    quiz.questions.add(question)
-                    question.save()
+                    # loop across questions - child evements of root ("quiz") element
+                    for child in root:
+                        result_string += "{} {} {}".format(child.tag, child.attrib, '\n')
+                        question_list = Question.objects.filter(title=child.attrib["title"])			
+                        if question_list.count() > 0: 
+                            result_string += "Question {} exists {}".format(child.attrib["title"], '\n')
+                            if question_list.count() == 1: # avoid duplicate questions
+                                result_string += "Question  {} will be chosen instead of importable {}".format(question_list[0].id,'\n')
+                                quiz.questions.add(question_list[0])
+                            continue;
+                        question = Question.objects.create()
+                        question.title = child.attrib["title"]
+                        quiz.questions.add(question)
+                        question.save()
 
-                    # loop across replies on question
-                    for second_child in child:
-                        result_string += "{} {} {}".format(second_child.tag, second_child.attrib, '\n')
-                        reply = Reply.objects.create(question=question)
-                        reply.title = second_child.text
-                        if 'correct' in second_child.attrib and second_child.attrib['correct'] == 'True':
-                            reply.correct = True
-                        reply.save()
-                quiz.save()
-        except QuizExistsException:
-            result_string += "Quiz {} exists. quitting import{}".format(root.attrib["title"], '\n')
+                        # loop across replies on question
+                        for second_child in child:
+                            result_string += "{} {} {}".format(second_child.tag, second_child.attrib, '\n')
+                            reply = Reply.objects.create(question=question)
+                            reply.title = second_child.text
+                            if 'correct' in second_child.attrib and second_child.attrib['correct'] == 'True':
+                                reply.correct = True
+                            reply.save()
+                    quiz.save()
+            except QuizExistsException:
+                result_string += "Quiz {} exists. quitting import{}".format(root.attrib["title"], '\n')
         return JsonResponse({'upload':result_string})
 
 def quiz(request,pk):
