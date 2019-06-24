@@ -84,7 +84,7 @@ def quiz_upload(request):
         try:
             if root.tag == 'quiz': # main XML tag must be quiz 
                 result_string += "Quiz {}{}".format(root.attrib["title"], '\n')
-                if len (Quiz.objects.filter(title=root.attrib["title"])) > 0:
+                if Quiz.objects.filter(title=root.attrib["title"]).count() > 0:
                     raise QuizExistsException # if qiuiz with same title exists - abort.
                 quiz = Quiz.objects.create()
                 quiz.title = root.attrib["title"]
@@ -92,7 +92,7 @@ def quiz_upload(request):
                 if 'group' in root.attrib:
                     student_group_list = StudentGroup.objects.filter(title=root.attrib["group"] )
                     student_group = None
-                    if len(student_group_list) == 1:
+                    if student_group_list.count() == 1:
                         student_group = student_group_list[0]
                         quiz.student_groups.add(student_group)
                     else:
@@ -102,9 +102,9 @@ def quiz_upload(request):
                 for child in root:
                     result_string += "{} {} {}".format(child.tag, child.attrib, '\n')
                     question_list = Question.objects.filter(title=child.attrib["title"])			
-                    if len (question_list) > 0: 
+                    if question_list.count() > 0: 
                         result_string += "Question {} exists {}".format(child.attrib["title"], '\n')
-                        if len (question_list) == 1: # avoid duplicate questions
+                        if question_list.count() == 1: # avoid duplicate questions
                             result_string += "Question  {} will be chosen instead of importable {}".format(question_list[0].id,'\n')
                             quiz.questions.add(question_list[0])
                         continue;
@@ -276,7 +276,7 @@ class UserResultPdf(View):
     def get(self, request,pk):
         user_result = Result.objects.filter(user=request.user, pk=pk)
         params={}
-        if len(user_result) == 1:
+        if user_result.count() == 1:
             params = {
             'result': user_result[0]
             }
