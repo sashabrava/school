@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/sashabrava/school.svg?branch=master)](https://travis-ci.org/sashabrava/school)
+[![Requirements Status](https://requires.io/github/sashabrava/school/requirements.svg?branch=master)](https://requires.io/github/sashabrava/school/requirements/?branch=master)
 # school
 
 Test school website written on Django framework.
