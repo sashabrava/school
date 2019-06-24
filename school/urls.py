@@ -18,7 +18,10 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.conf import settings
+if settings.DEBUG:
+    import debug_toolbar
 urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls)),
     path('admin/', admin.site.urls),
     path('news', include('news.urls')),
     path('', include('main_pages.urls')),
