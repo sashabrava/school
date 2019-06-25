@@ -41,7 +41,7 @@
             </div>
           {% endfor %}
         {% if result.id %}
-          <a class="btn btn-outline-primary" href="{% url 'quizzes:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
+          <a class="btn btn-outline-primary" href="{% url 'info_export:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
         {% endif %}
         </div>
 

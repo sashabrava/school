@@ -26,6 +26,7 @@ urlpatterns = [
     path('news', include('news.urls')),
     path('', include('main_pages.urls')),
     path('quizzes/', include('quizzes.urls')),
+    path('export/', include('info_export.urls')),
 	path('accounts/login/', auth_views.LoginView.as_view(),name='login'),
 	path('accounts/logout/', auth_views.LogoutView.as_view(),name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

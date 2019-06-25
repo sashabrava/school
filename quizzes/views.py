@@ -2,8 +2,7 @@ from django.shortcuts import render
 from .models import Quiz, Question, Reply, Result
 from .serializers import QuizModelSerializer, ResultSerializer
 from main_pages.models import StudentGroup,StudentProfile
-from django.http import HttpResponse
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.forms.models import model_to_dict
 from django.core.serializers import serialize
 import re
@@ -12,11 +11,10 @@ from django.urls import reverse_lazy
 from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View
-from io import BytesIO
-from django.template.loader import get_template
-import xhtml2pdf.pisa as pisa
-from django.conf import settings
+
+
+
+
 from lxml import etree
 from io import StringIO
 from django.contrib.admin.views.decorators import staff_member_required
@@ -274,55 +272,3 @@ def correct_replies(request, pk):
     context = {'result':user_result}
     return render(request, 'quizzes/result.html', context)
 
-class UserResultPdf(View):
-    # View, which renders test results in PDF format
-    def get(self, request,pk):
-        user_result = Result.objects.filter(user=request.user, pk=pk)
-        params={}
-        if user_result.count() == 1:
-            params = {
-            'result': user_result[0]
-            }
-
-        return Render.render(request,'quizes/result_pdf.html', params)    
-
-class Render:
-    # Class for static methods of creating PDF
-    @staticmethod
-    def link_callback(uri, rel):
-        '''
-        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
-        resources
-        '''
-        # use short variable names
-        sUrl = settings.STATIC_URL      # Typically /static/
-        sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
-        mUrl = settings.MEDIA_URL       # Typically /static/media/
-        mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
-
-        # convert URIs to absolute system paths
-        if uri.startswith(mUrl):
-            path = os.path.join(mRoot, uri.replace(mUrl, ""))
-        elif uri.startswith(sUrl):
-            path = os.path.join(sRoot, uri.replace(sUrl, ""))
-        else:
-            return uri  # handle absolute uri (ie: http://some.tld/foo.png)
-
-        # make sure that file exists
-        if not os.path.isfile(path):
-                raise Exception(
-                    'media URI must start with %s or %s' % (sUrl, mUrl)
-                )
-        return path
-
-    @staticmethod
-    def render(request,path: str, params: dict):
-        # render PDF document
-        template = get_template(path)
-        html = template.render(params)
-        response = BytesIO()
-        pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), response, link_callback=Render.link_callback)
-        if not pdf.err:
-            return HttpResponse(response.getvalue(), content_type='application/pdf')
-        else:
-            return HttpResponse("Error Rendering PDF", status=400)

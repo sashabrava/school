@@ -40,12 +40,14 @@
               {% endfor %}
               </div>
             </div>
-			{% elif forloop.last %}
-				<div  >
-					<a href="{% url 'quizes:user-result' pk=result.id %}" class="btn btn-primary">Show full</a>
-					<a class="btn btn-primary" href="{% url 'quizes:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
-				</div>
+
 			{% endif %}
+        {% if forloop.last %}
+        <div  >
+          <a href="{% url 'quizzes:user-result' pk=result.id %}" class="btn btn-primary">Show full</a>
+          <a class="btn btn-primary" href="{% url 'info_export:user-result-pdf' pk=result.id %}" target="_blank">Download PDF</a>
+        </div>
+        {% endif %}
           {% endfor %}
         </div>
       {% empty %}    
