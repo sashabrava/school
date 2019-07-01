@@ -1,8 +1,9 @@
+before_install:
+  - sudo apt install python-celery-common
 addons:
   apt:
     packages:
       - rabbitmq-server
-      - python-celery-common
 language: python
 python:
   - "3.6"
