@@ -1,5 +1,7 @@
-services:
-  - rabbitmq
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
 language: python
 python:
   - "3.6"
