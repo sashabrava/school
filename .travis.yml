@@ -1,5 +1,3 @@
-before_install:
-  - sudo apt install python-celery-common
 addons:
   apt:
     packages:
