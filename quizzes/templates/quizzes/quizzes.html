@@ -29,7 +29,8 @@
           {% if user.is_superuser %}
             <a href="{% url 'quizzes:correct-replies' pk=quiz.id %}" class="btn btn-danger mt-1">Replies</a>
             <a href="{% url 'quizzes:edit-quiz' pk=quiz.id %}" class="btn btn-warning mt-1">Edit</a>
-            <a href="{% url 'info_export:quiz-docx' pk=quiz.id %}" class="btn btn-info mt-1">DOCX</a>
+            <button class="btn btn-info mt-1" id="save-quiz-{{quiz.id}}-docx">DOCX</button>
+            {% include "info_export/basic/generate-progress.html" %}
           {% endif %}
         </div>
       

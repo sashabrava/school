@@ -1,11 +1,13 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 def check_url(self, page, code=200, **kwargs):
     response = self.client.get(reverse(page,kwargs=kwargs)) 
     self.assertEqual(response.status_code, code)
-
+    if type(response) == JsonResponse:
+        return response
 class MainPageViewTest(TestCase):
 
     @classmethod

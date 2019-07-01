@@ -142,3 +142,5 @@ INTERNAL_IPS = [
     # For django-debug-toolbar
     '127.0.0.1',
 ]
+
+CELERY_RESULT_BACKEND = 'amqp'

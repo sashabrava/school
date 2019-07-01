@@ -1,0 +1,51 @@
+<div class="progress" id="docx-progress" style="visibility:hidden">
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+</div> 
+<script>
+	$("#save-quiz-{{quiz.id}}-docx").on('click', function(e){
+  
+            $.ajax({
+                url: "{% url 'info_export:quiz-docx' pk=quiz.id  %}", 
+                type : "GET",
+                dataType : 'json',
+                data : {{quiz.id}}, 
+                success : function(result) {
+                    $("#docx-progress").css("visibility", "visible");
+                    console.log(result);
+                    ajax_to_get_status(result.task_id);
+                },
+                error: function(xhr, resp, text) {
+                    console.log(xhr, resp, text);
+                }
+            })
+        });
+
+	function ajax_to_get_status(task_id){
+            $.ajax({
+                url: "{% url 'info_export:get-async-task-status' task_id='1234' %}".replace("1234", task_id),
+                type : "GET",
+                dataType : 'json',
+                
+    beforeSend: function(jqXHR, options) {
+        setTimeout(function() {
+            // null beforeSend to prevent recursive ajax call
+            $.ajax($.extend(options, {beforeSend: $.noop}));
+        }, 5000);
+        return false;
+    },
+                success : function(result) {
+                    console.log(result);
+                    if (result.status == 'ready') {
+                    	window.location = result.link;
+                    }
+                    
+                    $("#docx-progress").css("visibility", "hidden");
+                },
+                error: function(xhr, resp, text) {
+                    console.log(xhr, resp, text);
+                    $("#docx-progress").css("visibility", "hidden");
+                }
+            })
+	}
+
+</script>
