@@ -2,6 +2,7 @@ addons:
   apt:
     packages:
       - rabbitmq-server
+      - python-celery-common
 language: python
 python:
   - "3.6"
@@ -10,9 +11,7 @@ install:
   - pip install -r requirements.txt
 script:
   - celery multi start worker1 \
-    -A school --pool=solo \
-    --pidfile="$HOME/run/celery/school.pid" \
-    --logfile="$HOME/log/celery/school.log"
+    -A school --pool=solo
   - python manage.py test
-  - celery multi stopwait worker1 --pidfile="$HOME/run/celery/school.pid"
+  - celery multi stopwait worker1
 dist: xenial
