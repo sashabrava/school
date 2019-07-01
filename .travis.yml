@@ -10,9 +10,9 @@ install:
   - pip install -r requirements.txt
 script:
   - celery multi start worker1 \
-    -A school \
-    --pidfile="$HOME/run/celery/%n.pid" \
-    --logfile="$HOME/log/celery/%n%I.log"
+    -A school --pool=solo \
+    --pidfile="$HOME/run/celery/school.pid" \
+    --logfile="$HOME/log/celery/school.log"
   - python manage.py test
-  - celery multi stopwait worker1 --pidfile="$HOME/run/celery/%n.pid"
+  - celery multi stopwait worker1 --pidfile="$HOME/run/celery/school.pid"
 dist: xenial
